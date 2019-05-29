@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/assetshistory.css' %}">
+<script src="{% static 'js/assetshistory.js' %}"></script>
+  <div id="back0">
+    <div id="back">
+      <div id="container" class="container">
+        <div>
+          {% if assets or is_history %}
+           {% include 'perfiles/tab_price.html' %}
+           <script>document.getElementById("nameC").innerHTML = "Activos Disponibles";</script>
+          {% else %}
+           <h1 id="mj_not_assets">No hay activos disponibles para consultar historial</h1>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="popup" id="myPopup">
+    <form class="form" action="{% url 'assets_history' %}" method="POST"
+          id="assets_history_form" onsubmit="name_enable(event)">
+      <input type="button" class="btn cancel" onclick="closePop()" value="x"/>
+      <b>Elija desde y hasta cuando quedra ver el historial del activo</b><br><br>
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button class="submit">Ver historial</button>
+    </form>
+  </div>
+  {% if is_history %}
+    {% if history %}
+    <center><h2 id="mj_graph"></h2></center>
+    <div style="width:95%; height:95%; position:relative; left:1%;z-index:-1" id="graph">
+    </div>
+    <center>
+    <h2>Historial de {{name_asset}}</h2><br>
+    <table>
+      <thead>
+        <tr><th>Fecha</th><th>Valor de Compra</th><th>Valor de Venta</th></tr>
+      </thead>
+      <tbody>
+       {% for data in history %}
+        <tr><td>{{ data.0 }}</td><td>{{ data.1 }}</td><td>{{ data.2 }}</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+      <center><h2>No hay datos historicos</h2>
+      <h2>para el archivo seleccionado</h2>
+    {% endif %}
+   <html>
+     <head>
+      <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+      <script type="text/javascript">
+        document.getElementById("prices").style.display = "none";
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(drawChart);
+        document.getElementById('mj_graph').innerHTML= "Grafica de valores";
+        function drawChart() {
+          //drawChart: Toma las fechas y valores dados por el back y dibuja el grafico.
+          var djangoData = {{ grap|safe }};
+          var data = google.visualization.arrayToDataTable(djangoData);
+          var chart = new google.visualization.LineChart(document.getElementById('graph'));
+          chart.draw(data);
+        };
+      </script>
+    </head>
+  </html>
+  <script>
+    document.getElementById("nameC").innerHTML = "";
+  </script>
+   {% else %}
+  {% endif %}
+  <script>
+  function put_values_on_the_form() {
+    //put_values_on_the_form: Completa el formulario de acuerdo a lo elejido por el usuario y habilita la funcion enableDiv.
+    document.getElementById("id_name").value = localStorage.name;
+    document.getElementById("id_name").disabled = true;
+    setTimeout("enableDiv()",1);
+  };
+  </script>
+{% endblock content %}

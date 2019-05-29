@@ -1,0 +1,7 @@
+{
+  "availableAssets": [
+                     {"name": "Apple", "type": "Share"},
+                     {"name": "Microsoft", "type": "Share"},
+                     {"name": "Dollar", "type": "Currency"}
+                     ]
+}

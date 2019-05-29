@@ -1,0 +1,24 @@
+<div id="prices">
+<center><h2 id="nameC">Cotizaciones</h2><br></center>
+<table id="tab">
+  <thead>
+    <tr>
+      <th>Nombre</th>
+      <th>Valor de Compra</th>
+      <th>Valor de Venta</th>
+      <th>Tipo</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for keys, values in assets %}
+    <tr>
+      <td><c class="c" onclick="openForm({{ values }}, {{ keys }})">
+          {{ keys.1 }}</c></td>
+      <td>{{ values.buy }}</td>
+      <td>{{ values.sell }}</td>
+      <td>{{ keys.0 }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+</div>

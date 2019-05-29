@@ -1,0 +1,42 @@
+{% load static  %}
+<!DOCTYPE html>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<html lang="es" id="base">
+  <head>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="{% static 'css/templates.css' %}">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <script src="{% static 'js/templates.js' %}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    {% if user.is_authenticated %}
+      <div class="navbar">
+        <c> Mi posición en el ranking: {{pos_ranking}}</c>
+        <c>Mi dinero liquido: {{user.virtual_money}}</c>
+      </div>
+      <div class="dropdown" id="menu_invest">
+        <button class="dropbtn">Menu</button>
+        <div class="dropdown-content">
+          <a href="{% url 'home' %}">Regresar a Pantalla Principal</a>
+          <a href="{% url 'profile' %}">Mi perfil</a>
+          <a href="{% url 'wallet' %}">Cartera de Inversiones</a>
+          <a href="{% url 'price' %}">Ver Cotizaciones</a>
+          <a href="{% url 'buy' %}">Comprar Activo</a>
+          <a href="{% url 'wallet' %}">Vender Activo</a>
+          <a href="{% url 'transaction_history' %}">Mis Transacciones</a>
+          <a href="{% url 'assets_history' %}">Consultar valor histórico de un activo</a>
+          <a href="{% url 'ranking' %}">Ver Ranking</a>
+          <a href="{% url 'alarm' %}">Alarmas</a>
+          <a href="{% url 'visibility_investments'%}">Inversiones Visibles</a>
+          <a href="{% url 'change_password' %}">Cambiar Contraseña</a>
+          <a href="{% url 'sign_out' %}">Cerrar sesión</a>
+        </div>
+      </div>
+    {% endif %}
+  </head>
+  <body id="body">
+    {% block content %}
+
+    {% endblock content %}
+  </body>
+</html>

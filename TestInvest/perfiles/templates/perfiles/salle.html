@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Venta de Activo{% endblock %}
+{% block content %}
+<title>Venta de Activos</title>
+<meta charset="utf-8">
+<style type="text/css">
+  body{ background-color:#EFF8FB; }
+  .popup {margin-top: -14%; right:1%;}
+  #container {
+    position: relative;
+    left:-3%;
+  }
+  .form .btn {width: 20%;}
+  .form .cancel {width: 20%;}
+</style>
+ <script src="{% static 'js/salle.js' %}"></script>
+ <font color="#030303" face="georgia" size="3"> 
+<center>
+<h1>Venta de activo</h1>
+<h3  id="demo"></h3>
+<script>
+window.onload = function() {
+    var valor = comprobar();
+    document.getElementById("demo").innerHTML = "La cantidad de activos disponibles de " + valor.nombre + " es : " + valor.cant;
+};
+</script>
+<div id="back0">
+  <div id="back">
+    </div>
+  </div>
+<div id="container">
+  <form action="" method="Post" name="formu" id="formu" onsubmit="return false;" class="form">
+    <br>Tu cantidad: <br><input required type="number" id="num" name="cantidad" value="" min="1"pattern="^[1-9]\d*$"><br></br>
+    <input type="button" class="btn" onclick="openForm({{virtual_money}})" value="Confirmar"/>
+    <input type="button" class="btn cancel" onclick="window.location='{% url 'wallet' %}'" value="Volver"/>
+  </form>
+</div>
+<div class="popup" id="myForm">
+    <form method="POST" class="form" onsubmit="Respuesta({{virtual_money}})" id="form">{% csrf_token %}
+    <h1>RESUMEN</h1>
+      {{ form.as_p }}
+    <p>Estas seguro de realizar esta operacion?</p>
+    <input id="accept" type="submit" class="btn" value="Si"/>
+    <input type="button" class="btn cancel" onclick="closePop()" value="No"/>
+  </form>
+</div>
+{% endblock content %}
+

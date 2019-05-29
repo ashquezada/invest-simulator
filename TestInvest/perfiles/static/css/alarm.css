@@ -1,0 +1,20 @@
+#alarmForm {
+  position: absolute;
+  top: 220px;
+  left: 740px;
+}
+#alarmForm [type="text"]{
+  text-align: left;
+  background-color: #FFFFFF ;
+  border: none;
+  color: black;
+  width: 170px;
+}
+#prices {
+  position: absolute;
+  top: 220px;
+  left: 220px;
+}
+.form .btn {
+  width: 50%;
+}

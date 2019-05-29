@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+{% block title %}Ver Ranking{% endblock %}
+{% block content %}
+<style>
+  #div1 {
+    overflow-y: scroll;
+    height: 500px;
+    width: 400px;
+  }
+  #a {
+    top: 400px;
+    left: 450px;
+  }
+  #my_data {background-color: #0f7460;}
+</style>
+<center>
+  <html>
+  <h1>Ranking de usuarios</h1>
+  <div id="div1">
+    <table border="1" style="width:100%; height:1%;">
+      <tr>
+      <th>Posicion</th>
+      <th>Nombre</th>
+      <th>Cotizacion</th>
+      </tr>
+      {%for dato in lista_capital%}
+        {%if dato.1 == user.username%}
+          <tr id="my_data">
+            <td>{{dato.0}}</td>
+            <td><b style="color:black;">{{ dato.1 }}</b></td>
+            <td>{{dato.2}}</td>
+          </tr>
+        {%else%}
+          <tr>
+            <td>{{dato.0}}</td>
+            <td>{{dato.1}}</td>
+            <td>{{dato.2}}</td>
+          </tr>
+        {%endif%}
+      {%endfor%}
+    </table>
+  </div>
+  </html>
+</center>
+{% endblock content %}

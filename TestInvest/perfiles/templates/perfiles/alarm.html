@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load static  %}
+{% block title %}Alarmas{% endblock %}
+{% block content %}
+  <link rel="stylesheet" href="{% static 'css/alarm.css' %}">
+  <script src="{% static 'js/alarm.js' %}"></script>
+  <title>Invest Simulator</title>
+      {% include 'perfiles/menu_alarm.html' %}
+  <body>
+    {% if assets %}
+      <center><h3>Agregar alarmas</h3></center>
+      <div class="menu">{% include 'perfiles/tab_price.html' %}</div>
+      <form action="{% url 'alarm' %}" method="POST" onsubmit=confirm(event) class="form" id="alarmForm">
+        <h3 id="alar">Configure su alarma</h3><br><br>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input id="accept" type="submit" class="btn" value="Configurar alarma"/>
+      </form>
+    {% else %}
+        <center><h3>No hay activos sobre cuales configurar alarmas</h3></center>
+    {% endif %}
+  </body>
+  <script>
+  document.getElementById("nameC").innerHTML = "Activos Disponibles";
+  document.getElementById("nameC").style.left = "5%";
+  document.getElementById("id_name_asset").disabled = true;
+  document.getElementById("id_previous_quote").disabled = true;
+  localStorage.setItem('sell', "");
+  localStorage.setItem('buy', "");
+  document.getElementById("id_type_quote").onchange = function change() {
+    //change: Cambia el valor de compra o venta dependiendo de lo elejido por el usuario.
+    var type_qoute = document.getElementById("id_type_quote").value;
+    if (type_qoute == 'sell') {
+      document.getElementById("id_previous_quote").value = localStorage.sell;
+    }
+    if (type_qoute == 'buy') {
+      document.getElementById("id_previous_quote").value = localStorage.buy;
+    };
+};
+  </script>
+{% endblock content %}

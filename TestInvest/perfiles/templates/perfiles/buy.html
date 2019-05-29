@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% load static  %}
+{% block content %}
+  <link rel="stylesheet" href="{% static 'css/buy.css' %}">
+  <script src="{% static 'js/buy.js' %}"></script>
+  {% if messages %}
+     {% for message in messages %}
+       <center>
+         <h1>{{ message }}</h1>
+       </center>
+     {% endfor %}
+  {% endif %}
+  <div id="back0">
+    <div id="back">
+      <div id="container" class="container">
+      {% if assets %}
+        {% include 'perfiles/tab_price.html' %}
+      {% else %}
+        <h1 id="mj_not_assets">No hay activos disponibles para comprar</h1>
+      {% endif %}
+      </div>
+    </div>
+  </div>
+  <div class="popup" id="myPopup">
+    <form action="{% url 'buy' %}" method="POST" class="form"
+      onsubmit="confirm(event, '{{virtual_money}}')" id="buy_form">
+      <h2>Comprar Activo</h2>
+      {% csrf_token %}
+      {{ form.as_p }}
+      <b id="total">Subtotal: $0</b><br>
+      <b>Saldo disponible: ${{virtual_money}}</b><br><br>
+      <center>
+      <input id="accept" type="submit" value="Confirmar" class="btn"/>
+      <input id="cancel" type="button" class="btn cancel" onclick="closePop()" value="Cancelar"/>
+    </form>
+    <div id="confirm">
+     <b class="message"></b><br><br>
+        <center>
+       <button class="yes" onclick="success()">Si</button>&nbsp&nbsp
+       <button class="no" onclick="window.location=url">No</button><br><br>
+    <b id="time"></b>
+    </div>
+    <div class="popuptext" id="myForm_buy">
+      <h4>El activo sera visible por otros jugadores</h4>
+      <input id="accept" type="button" value="aceptar" onclick="enviar()">
+    </div>
+  </div>
+  {% if mj == True %}
+  <div id="back0">
+    <div id="back">
+      <div>
+        <div class="popuptext" id="myPopup2">
+          <h3 id="mj"></h3>
+          <script>
+            document.getElementById("myPopup").style.display = "none";
+            document.getElementById("prices").style['pointer-events'] = 'none';
+            $("#back").addClass('disable_background');
+          </script>
+       </div>
+      </div>
+    </div>
+  </div>
+<script>
+  document.getElementById("mj").innerHTML =
+  "Su compra del activo: " + localStorage.names +
+  " por una cantidad de: " + localStorage.amounts +
+  " a un precio total de: $" + localStorage.total_amount +
+  " Fue un exito, su actual saldo en dinero liquido es: $" +
+  '{{virtual_money}}' + "." +
+  '<br><br><center class="form"><input type="button" class="btn cancel" onclick="send_to_wallet()" value="Ver mi cartera"/>' +
+  '&nbsp&nbsp<input type="button" class="btn" onclick="reload()" value="Continuar comprando"/></center>';
+  function send_to_wallet() {
+    window.location="http://localhost:8000/wallet";
+  }
+  function reload() {
+    window.location="http://localhost:8000/buy";
+  }
+  {% endif %}
+</script>
+<script>
+  document.getElementById("nameC").innerHTML = "Compra";
+  var url="http://localhost:8000";
+  $("#id_total_amount").change(function () {
+    //para calcular el subtotal cuando se activa el scroll.
+    var amount = $("#id_total_amount").val();
+    var total = amount * localStorage.sell;
+    document.getElementById("total").innerHTML = "Subtotal $" + total;
+  });
+  $("#id_total_amount").keyup(function () {
+    //para calcular el subtotal cuando se escribe un valor.
+    var amount2 =  $(this).val();
+    var total2 = amount2 * localStorage.sell;
+    document.getElementById("total").innerHTML = "Subtotal $" + total2;
+  });
+  function put_values_on_the_form() {
+    //put_values_on_the_form: Completa el formulario de acuerdo a lo elejido por el usuario y habilita la funcion enableDiv.
+    document.getElementById("id_total_amount").value = "";
+    document.getElementById("id_name").disabled = true;
+    var value = JSON.parse(localStorage.value);
+    var sell = value['sell'];
+    var buy = value['buy'];
+    localStorage.setItem('sell', sell);
+    localStorage.setItem('buy', buy);
+    document.getElementById("id_name").value = localStorage.name;
+    setTimeout("enableDiv()",1);
+  }
+</script>
+{% endblock content %}

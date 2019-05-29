@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Bievenido{% endblock %}
+
+{% block content %}
+  <style>
+    b {color:#0d7dc6;}
+  </style>
+    {% if user.is_authenticated %}
+      <div align="center">
+        <h1 color="blue">Invest Simulator</h1>
+      </div>
+      <center>
+      <h2>Hola, {{ user.username }}</h2>
+      <img src="{{ user.avatar.url }}" width="50px" height="50px" align="center"/>
+      </center>
+    {% else %}
+      <div align="center">
+        <h2><b>Bienvenido Invest Simulator</b>
+        <br>para poder continuar puedes<br>
+        <a href="{% url 'sign_up' %}">Registrarte</a> <br>o si ya tienes cuenta<br>
+        <a href="{% url 'sign_in' %}">Inicia Sesión</a></a></h2></div>
+    {% endif %}
+
+{% endblock content %}

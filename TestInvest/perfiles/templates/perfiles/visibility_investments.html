@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Inversiones Visibles.{% endblock %}
+{% block content%}
+    <center>
+    <h2>Inversiones Visibles</h2>
+    <h2>{{user.username}}</h2>
+    {% if investments_v %}
+        <TABLE BORDER>
+            <TR>
+                <TH>Jugador</TH>
+                <TH>Posición Ranking</TH>
+                <TH>Nombre Activo</TH>
+                <TH>Fecha de compra</TH>
+                <TH>Valor de compra</TH>
+                <TH>Valor de compra actual</TH>
+                <TH>Valor de venta actual</TH>
+            </TR>
+            {% for investment in investments_v %}
+                <tbody>
+                <tr>
+                    <td>{{ investment.user.username }}</td>
+                    {% for data in ranking %}
+                        {% if data.1 == investment.user.username %}
+                            <td>{{ data.0 }}</td>
+                        {% endif %}
+                    {% endfor %}
+                    <td>{{ investment.name }}</td>
+                    {% for data in datas %}
+                        {% if investment.name == data.1 and investment.user_id == data.0 %}
+                            <td>{{ data.2 }}</td>
+                            <td>{{ data.3 }}</td>
+                        {% endif %}
+                    {% endfor %}
+                    {% for key, values in assets %}
+                        {% if key.1 == investment.name %}
+                            <td>${{ values.buy }}</td>
+                            <td>${{ values.sell }}</td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+                </tbody>
+            {% endfor %}
+        </TABLE>
+    {% else %}
+        <h1> No hay inversiones visibles.</h1>
+    {% endif %}
+    <center>
+    <br><a href="{% url 'home' %}">Volver al inicio</a>
+{% endblock content %}

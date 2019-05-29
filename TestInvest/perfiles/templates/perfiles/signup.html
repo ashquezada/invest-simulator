@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block title %}Registro{% endblock %}
+{% block content %}
+  <center>
+    <h3 id="load">Para Iniciar Sesión haga click
+    <a href="{% url 'sign_in' %}"><b>aqui</b></a></h3>
+    <h3 id="init">Para Volver al Inicio haga click 
+    <a href="{% url 'home' %}"><b>aqui</b></a></h3>
+  <h2 id="signup">Registrate</h2>
+  <h2 id="message"></h2>
+  <form method="post" enctype="multipart/form-data" id="myForm">
+    {% csrf_token %}
+    {% for field in form %}
+      <p>
+        {{ field.label_tag }}<br>
+        {{ field }}
+        {% for error in field.errors %}
+        <p style="color: red">{{ error }}</p>
+        {% endfor %}</p>
+    {% endfor %}
+    <button type="submit">Crear Cuenta</button><br><br>
+  </form>
+  {% if form.is_valid %}
+    <script>
+    myFunction();
+    function myFunction() {
+        //myFunction: Borra formulario de registro.
+        document.getElementById("signup").innerHTML = "";
+    }
+    document.getElementById("myForm").innerHTML = "";
+    var totalTiempo=10;
+    var url="http://localhost:8000";
+    function updateReloj() {
+      //updateReloj: Muestra mensaje de confirmacion, reloj de espera, luego redirije a pantalla principal.
+      document.getElementById("load").innerHTML = "";
+      document.getElementById("init").innerHTML = "";
+      document.getElementById('message').innerHTML = `<b>El registro se
+      realizo correctamente!<br/> Redireccionando a la pagina principal
+      en <c>${totalTiempo}</c> segundos <br/> o haga click
+      <a href="{% url 'home' %}">aqui</a> para ir directamente</b>`;
+      if(totalTiempo==0) {
+          window.location=url;
+      } else {
+        totalTiempo-=1;
+        setTimeout("updateReloj()",1000);
+      }
+    }
+    window.onload=updateReloj;
+    </script>
+    {% endif %}
+{% endblock %}

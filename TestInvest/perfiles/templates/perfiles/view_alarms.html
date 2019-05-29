@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load static  %}
+{% block title %}Alarmas{% endblock %}
+{% block content %}
+{% include 'perfiles/menu_alarm.html' %}
+<style>
+  w {color:#0d5c4c;}
+  #container {left:28%; top:11.7%}
+  #prices {position:relative;left:-2%;}
+  #mj_not_alarms{position:relative;left:2%;}
+</style>
+<script src="{% static 'js/viewalarms.js' %}"></script>
+<div id="back0">
+  <div id="back">
+    <div id="container">
+      {% if view_alarms %}
+        <center> <h3>Mis Alarmas</h3><br>
+        <table id="prices">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Tipo de Cotizacion</th>
+              <th>Umbral</th>
+              <th>Precio</th>
+              <th>Configurar</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for data in view_alarms %}
+            <tr>
+              <td>{{ data.0 }}</td>
+              <td>{{ data.4 }}</td>
+              <td>{{ data.1 }}</td>
+              <td>{{ data.2 }}</td>
+              <td> <c class="c" onclick="openForm('{{data.0}}','{{data.1}}','{{data.2}}', '{{data.3}}')">
+                Dar de Baja</c></td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+        </center>
+      {% else %}
+        <h1 id="mj_not_alarms">No tienes alarmas activas</h1>
+      {% endif %}
+    </div>
+  </div>
+</div>
+  <div class="popup" id="myPopup">
+    <form class="form" action="{% url 'view_alarm' %}" method="POST" id="my_form">
+      {% csrf_token %}
+      <h3 id="asd"></h3>
+      {{ form_low }}<br>
+      <input id="accept" type="submit" value="Aceptar" onclick="send_low_form()" class="btn"/>
+      <input type="button" class="btn cancel" onclick="closePop()" value="Cancelar"/>
+    </form>
+  </div>
+<script>
+  function put_values_on_the_form() {
+    //put_values_on_the_form: Completa el mensaje del formulario a partir del activo elejido por el usuario.
+    document.getElementById("asd").innerHTML = "¿Desea dar de baja la alarma sobre el activo " +
+    '<b>' + JSON.parse(localStorage.value) + '</b>' + " con umbral " +
+    '<b>' + localStorage.name + '</b>' + " a " +
+    '<b>'  + "$" + localStorage.price+ '</b>' + "?";
+    setTimeout("enableDiv()",1);
+  };
+</script>
+{% endblock content %}

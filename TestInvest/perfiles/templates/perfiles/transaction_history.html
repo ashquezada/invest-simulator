@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Historial de Transacciones{% endblock %}
+{% block content%}
+    <center>
+    <h2>Historial de Transacciones de {{user.username}}</h2>
+    {% if my_transactions %}
+        <TABLE BORDER>
+            <TR>
+                <TH>Fecha</TH>
+                <TH>Tipo de transacción</TH>
+                <TH>Nombre</TH>
+                <TH>Cantidad</TH>
+                <TH>Valor de compra</TH>
+                <TH>Valor de venta</TH>
+            </TR>
+            {% for transaction in my_transactions %}
+                <tbody>
+                <tr>
+                    <td>{{ transaction.date }}</td>
+                    <td>{{ transaction.type_transaction }}</td>
+                    <td>{{ transaction.user_asset.name }}</td>
+                    <td>{{ transaction.amount }} </td>
+                    <td>{{ transaction.value_buy }}</td>
+                    <td>{{ transaction.value_sell }}</td>
+                </tr>
+                </tbody>
+            {% endfor %}
+        </TABLE>
+    {% else %}
+        <h1> No hay transacciones disponibles.</h1>
+    {% endif %}
+    <center>
+    <br><a href="{% url 'home' %}">Volver al inicio</a>
+{% endblock content %}

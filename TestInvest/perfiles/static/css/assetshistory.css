@@ -1,0 +1,21 @@
+.form .cancel {
+  background-color: red;
+  margin-left: 86%;
+  width: 14%;
+}
+ #mj_not_assets{
+  position:absolute;
+  left:5%;
+}
+div#assets_history_form{
+  display: none;
+  border: 2px solid #aaa;
+  width: 100%;
+  padding: 5px 5px 5px 4px;
+  border-color: blueviolet;
+  left: 0px;
+  top: 30%;
+  position: absolute;
+  background-color: aliceblue;
+  text-align: center;
+}

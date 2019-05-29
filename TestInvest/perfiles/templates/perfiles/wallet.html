@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Cartera de Inversiones{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/wallet.css' %}">
+<script src="{% static 'js/wallet.js' %}"></script>
+<div id="back0">
+  <div id="back">
+    <div id="container" class="container">
+      {% if my_assets %}
+      <h1>Cartera de inversiones</h1>
+      <h2> Nombre: {{user.username}}</h2>
+      <TABLE BORDER>
+        <TR>
+          <TH>Nombre</TH>
+          <TH>Cantidad</TH>
+          <TH>Tipo</TH>
+          <TH>Valor de adquisición</TH>
+          <TH>Valor de compra</TH>
+          <TH>Valor de venta</TH>
+          <TH>Visibilidad</TH>
+        </TR>
+        <tbody>
+        {% for asset in my_assets %}
+          {% for keys, values in assets %}
+            {% if keys.1 == asset.name %}
+            <tr> 
+            {% if asset.total_amount != 0 and values.buy != None and values.sell != None %}
+             <td>
+              <a href="{% url 'salle' %}?name={{asset.name}}&count={{asset.total_amount }}&cotiz={{ values.buy}}">
+               {{ asset.name }}</td>
+            {% else %}
+              <td>{{ asset.name }}</td>
+            {% endif %}
+              <td>{{ asset.total_amount }}</td>
+              <td>{{ asset.type_asset }}</td>
+              <td>${{ asset.old_unit_value }}</td>
+            {% if values.buy != None and values.buy != None %}
+              <td>${{ values.buy }} </td>
+            {% else %}
+              <td>Sin cotizacion </td>
+            {% endif %}
+            {% if values.sell != None %}
+              <td>${{ values.sell }} </td>
+            {% else %}
+              <td>Sin cotizacion </td>
+            {% endif %}
+              <td>
+                <form method="POST" class="form-container" id="form" hidden>{% csrf_token %}
+                  {% for hidden in form.hidden_fields %}
+                    {{ hidden }}
+                  {% endfor %}
+                </form>
+                {% if asset.visibility %}
+                  <input type="checkbox" checked onclick="mj(event, '{{asset.name}}', 'False')">&nbspVisible<br>
+                {% else %}
+                  <input type="checkbox" onclick="mj(event, '{{asset.name}}', 'True')">&nbspVisible<br>
+                {% endif %}
+
+              </td>
+            </tr>
+            {% endif %}
+          {% endfor %}
+        {% endfor %}
+        </tbody>
+      </TABLE>
+      <h3>Capital: {{capital}}</h3>
+    </div>
+  </div>
+</div>
+  {% else %}
+      <h1> No dispone de activos!!!</h1>
+  {% endif %}
+    <div class="popuptext" id="myForm">
+      <h4 id="vis"></h4>
+      <input id="accept" type="button" value="aceptar" onclick="send()">
+    </div>
+{% endblock content %}
